@@ -3,7 +3,7 @@ set -e -x
 
 run_migrations(){
     echo "Running liquibase migrations"
-    ./run-liquibase.sh $1 $2 $3 $4 $5
+    sh run-liquibase.sh $1 $2 $3 $4 $5
 }
 
 . /etc/bahmni-reports/bahmni-reports.conf
