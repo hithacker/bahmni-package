@@ -14,5 +14,5 @@ run_migrations() {
     /opt/openmrs/etc/run-liquibase.sh liquibase-update-to-latest.xml
 }
 
-./initDB.sh
+sh ./initDB.sh
 run_migrations
