@@ -9,8 +9,8 @@ fi
 
 run_migrations() {
     echo "Running openmrs liquibase-core-data.xml and liquibase-update-to-latest.xml"
-    /opt/openmrs/etc/run-liquibase.sh liquibase-core-data.xml
-    /opt/openmrs/etc/run-liquibase.sh liquibase-update-to-latest.xml
+    ./run-liquibase.sh liquibase-core-data.xml
+    ./run-liquibase.sh liquibase-update-to-latest.xml
 }
 
 RESULT=`mysql -h $OPENMRS_DB_SERVER -u$MYSQL_ROOT_USER -p$MYSQL_ROOT_PASSWORD --skip-column-names -e "SHOW DATABASES LIKE '$OPENMRS_DB_NAME'"`
