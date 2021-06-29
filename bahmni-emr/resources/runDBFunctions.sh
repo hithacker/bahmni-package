@@ -14,5 +14,19 @@ run_migrations() {
     /opt/openmrs/etc/run-liquibase.sh liquibase-update-to-latest.xml
 }
 
-sh ./initDB.sh
+RESULT=`mysql -h $OPENMRS_DB_SERVER -u$MYSQL_ROOT_USER -p$MYSQL_ROOT_PASSWORD --skip-column-names -e "SHOW DATABASES LIKE '$OPENMRS_DB_NAME'"`
+if [ "$RESULT" != "$OPENMRS_DB_NAME" ] ; then
+  mysql -h $OPENMRS_DB_SERVER -u$MYSQL_ROOT_USER -p$MYSQL_ROOT_PASSWORD -e "CREATE DATABASE $OPENMRS_DB_NAME;"
+  if [ "${IMPLEMENTATION_NAME:-default}" = "default" ]; then
+    echo "$OPENMRS_DB_NAME database not found... Restoring a base dump suitable to work with default config"
+    mysql -h $OPENMRS_DB_SERVER -u$MYSQL_ROOT_USER -p$MYSQL_ROOT_PASSWORD $OPENMRS_DB_NAME < openmrs_demo_dump.sql
+  else
+    echo "clean $OPENMRS_DB_NAME database will be created with no demo data"
+    mysql -h $OPENMRS_DB_SERVER -u$MYSQL_ROOT_USER -p$MYSQL_ROOT_PASSWORD  < openmrs_clean_dump.sql
+  fi
+fi
+
+mysql -h $OPENMRS_DB_SERVER -u$MYSQL_ROOT_USER -p$MYSQL_ROOT_PASSWORD -e "CREATE USER '$OPENMRS_DB_USER'@'$OPENMRS_DB_SERVER' IDENTIFIED BY '*';
+    GRANT ALL PRIVILEGES ON openmrs.* TO '$OPENMRS_DB_USER'@'$OPENMRS_DB_SERVER' identified by '$OPENMRS_DB_PASSWORD'  WITH GRANT OPTION;"
+
 run_migrations
