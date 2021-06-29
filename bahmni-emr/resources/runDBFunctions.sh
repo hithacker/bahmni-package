@@ -1,5 +1,4 @@
 #!/bin/sh
-set -e -x
 
 if [ -f /etc/bahmni-installer/bahmni.conf ]; then
 . /etc/bahmni-installer/bahmni.conf
